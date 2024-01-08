@@ -1,6 +1,7 @@
 Learning Objectives
 At the end of this project, you are expected to be able to explain to anyone, without the help of Google:
 
+Everything concerning javascript
 General
 Why JavaScript programming is amazing
 How to run a JavaScript script
