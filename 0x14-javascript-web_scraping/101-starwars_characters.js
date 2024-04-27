@@ -1,25 +1,32 @@
 #!/usr/bin/node
 
-const request = require('request');
-const id = process.argv[2];
-const url = `https://swapi-api.alx-tools.com/api/films/${id}`;
-
-request.get(url, (error, response, body) => {
-  if (error) {
-    console.log(error);
-  } else {
-    const content = JSON.parse(body);
-    const characters = content.characters;
-    // console.log(characters);
-    for (const character of characters) {
-      request.get(character, (error, response, body) => {
-        if (error) {
-          console.log(error);
-        } else {
-          const names = JSON.parse(body);
-          console.log(names.name);
-        }
-      });
+function order (characters, idx) {
+  if (idx >= characters.length) {
+    return;
+  }
+  request(characters[idx], function (err, response, body) {
+    if (err) {
+      console.log(err);
+    } else if (response.statusCode === 200) {
+      const person = JSON.parse(body);
+      console.log(person.name);
+      return order(characters, ++idx);
+    } else {
+      console.log('error ocurred, Status code: ' + response.statusCode);
     }
+  });
+}
+
+const request = require('request');
+const url = 'https://swapi-api.hbtn.io/api/films/';
+const ep = process.argv[2];
+request(url + ep, function (err, response, body) {
+  if (err) {
+    console.log(err);
+  } else if (response.statusCode === 200) {
+    const jsobj = JSON.parse(body);
+    order(jsobj.characters, 0);
+  } else {
+    console.log('error ocurred, Status code: ' + response.statusCode);
   }
 });
